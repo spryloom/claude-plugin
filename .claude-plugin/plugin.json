@@ -1,5 +1,6 @@
 {
   "name": "spryloom",
+  "displayName": "Spryloom",
   "version": "0.1.6",
   "description": "Publish the app your agent just built to your team: a private address behind sign-in, with a database, scheduled jobs and email. No servers to set up.",
   "author": {
@@ -8,7 +9,19 @@
     "url": "https://spryloom.com"
   },
   "homepage": "https://spryloom.com/docs",
+  "documentationUrl": "https://spryloom.com/docs/getting-started",
+  "supportUrl": "https://spryloom.com/docs/troubleshooting",
+  "privacyPolicyUrl": "https://spryloom.com/privacy",
+  "termsOfServiceUrl": "https://spryloom.com/terms",
   "repository": "https://github.com/spryloom/claude-plugin",
   "license": "MIT",
-  "keywords": ["publish", "deploy", "internal-tools", "hosting", "team", "mcp"]
+  "keywords": [
+    "publish",
+    "deploy",
+    "internal-tools",
+    "hosting",
+    "team",
+    "mcp"
+  ],
+  "icon": "./.claude-plugin/icon.png"
 }
