@@ -106,6 +106,10 @@ costs the user nothing to keep, and sits behind the same sign-in as an app.
   turned into a readable page. Nothing is written next to the file.
 - **Several files:** a folder with an `index.html` and no `package.json`. Images,
   CSS and JavaScript next to it come along.
+- **A Vite or React app with no server:** publish the folder as usual. Spryloom
+  runs its build and publishes what the build writes (`dist`) as a page, and
+  client-side routes work. Give it no `start` script and no server framework,
+  and declare `backend: none`.
 - **Libraries:** a page may load scripts and styles from cdnjs.cloudflare.com,
   cdn.jsdelivr.net and unpkg.com, and fonts from Google Fonts. Anything else it
   loads must be saved into the folder and linked there, or browsers block it.
