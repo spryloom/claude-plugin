@@ -96,6 +96,26 @@ repository with several projects, that is the app's own folder, not the root. A
 folder with nothing to run is refused, because guessing which subfolder was meant
 would be worse than asking.
 
+### Publishing a page
+
+A report, a document, a dashboard of fixed numbers, or a prototype with nothing
+saved is a **page**: plain files, no server. Publish it as one. It opens instantly,
+costs the user nothing to keep, and sits behind the same sign-in as an app.
+
+- **One file:** pass the `.html` or `.md` file itself as `root`. Markdown is
+  turned into a readable page. Nothing is written next to the file.
+- **Several files:** a folder with an `index.html` and no `package.json`. Images,
+  CSS and JavaScript next to it come along.
+- **Libraries:** a page may load scripts and styles from cdnjs.cloudflare.com,
+  cdn.jsdelivr.net and unpkg.com, and fonts from Google Fonts. Anything else it
+  loads must be saved into the folder and linked there, or browsers block it.
+- **What it can't do:** a page's scripts can only talk to the page itself, so it
+  can't call an API or save anything. Don't declare a database, jobs, email or
+  outside services for a page; they are refused.
+- **When it outgrows a page:** once it needs saved data, a schedule or email, add
+  a `package.json` with a start script and publish again under the same name. It
+  becomes an app at the same address.
+
 ### Write the manifest
 
 Write `spryloom.yaml` in the project root before publishing. You know what the
