@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "spryloom": {
+      "command": "npx",
+      "args": ["-y", "spryloom", "mcp"]
+    }
+  }
+}

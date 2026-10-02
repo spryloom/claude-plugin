@@ -1,0 +1,17 @@
+{
+  "name": "spryloom",
+  "owner": {
+    "name": "Spryloom",
+    "email": "hello@spryloom.com"
+  },
+  "metadata": {
+    "description": "Spryloom's plugin for Claude Code: publish apps to your team."
+  },
+  "plugins": [
+    {
+      "name": "spryloom",
+      "source": "./",
+      "description": "Publish the app your agent just built to your team, behind sign-in, with a database, jobs and email."
+    }
+  ]
+}
