@@ -12,8 +12,8 @@ This plugin adds two things to Claude Code:
 - **The Spryloom MCP server.** It gives Claude the tools to publish, invite
   coworkers, read logs and roll back. It runs through `npx spryloom mcp`.
 
-Spryloom is in an invite-only beta. Request access at
-[spryloom.com](https://spryloom.com/#invite).
+Spryloom is in a free, open beta. Anyone can sign in with an email address;
+nobody has to approve you.
 
 ## Setup
 
