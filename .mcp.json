@@ -1,10 +1,9 @@
 {
   "mcpServers": {
     "spryloom": {
-      "command": "npx",
+      "command": "node",
       "args": [
-        "-y",
-        "spryloom@0.1.10",
+        "${CLAUDE_PLUGIN_ROOT}/server/lib/cli/index.js",
         "mcp"
       ]
     }

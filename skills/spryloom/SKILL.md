@@ -159,8 +159,23 @@ See `references/manifest.md` for every field.
 
 ### Publish
 
-Call the `publish` tool. If the Spryloom MCP server is not available, run
-`spry publish` in the project directory.
+Call the `publish` tool. If it says Spryloom is not signed in, ask the person
+which email address to use, call `sign_in` with it, tell them the code it
+returns, and call `finish_sign_in` once they have approved. This happens once
+per machine.
+
+If the Spryloom tools are not available at all, use the command line. When
+`spry` is not installed, `npx -y spryloom` is the same command and needs nothing
+installed, so read every `spry` in this skill that way. Signing in waits for the
+person to click a link and shows a code they must see, so ask them to run it
+themselves (in Claude Code they can type it after `!`):
+
+```
+npx -y spryloom login --email you@company.com
+```
+
+Then run `spry publish` (or `npx -y spryloom publish`) in the project directory.
+Never stop at "Spryloom is not connected": one of these paths always works.
 
 A publish takes a few minutes: Spryloom builds the app, sets up its database
 and waits for it to answer before switching over. The tool reports each stage

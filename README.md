@@ -10,7 +10,9 @@ This plugin adds two things to Claude Code:
 - **The Spryloom skill.** It teaches Claude to write apps that publish cleanly,
   and to publish them when you say "share this with my team".
 - **The Spryloom MCP server.** It gives Claude the tools to publish, invite
-  coworkers, read logs and roll back. It runs through `npx spryloom mcp`.
+  coworkers, read logs and roll back. It ships inside the plugin, under
+  `server/`, and runs with the Node.js already on your machine. Nothing is
+  downloaded when it starts.
 
 Spryloom is in a free, open beta. Anyone can sign in with an email address;
 nobody has to approve you.
@@ -26,24 +28,20 @@ You need Node.js 20.19 or later.
    /plugin install spryloom@spryloom
    ```
 
-2. Sign in once, in a terminal:
-
-   ```
-   npx spryloom login --email you@yourcompany.com
-   ```
-
-   Spryloom emails you a link. Open it, check that the page shows the same
-   code as your terminal, and confirm. There is no password.
-
-3. Restart Claude Code, build something, and ask:
+2. Build something, and ask:
 
    > Publish this so my team can use it.
 
-   Claude writes `spryloom.yaml`, publishes the app and gives you its address.
-   Then ask it to invite a coworker by email.
+   The first time, Claude asks for your email address. Spryloom emails you a
+   link and Claude shows you a short code: open the link, check that the page
+   shows the same code, and approve. There is no password, and you sign in
+   once per machine.
 
-The MCP server acts as whoever the terminal is signed in as. If you'd rather
-pass a token, set `SPRYLOOM_TOKEN` in the environment Claude Code runs in.
+   Claude then writes `spryloom.yaml`, publishes the app and gives you its
+   address. Ask it to invite a coworker by email.
+
+Signing in from Claude and `npx spryloom login --email you@yourcompany.com` in
+a terminal are the same sign-in, kept in the same place, so either covers both.
 
 ## Privacy Policy
 
