@@ -17,7 +17,7 @@ import { init } from './commands/init.js';
 import { skill } from './commands/skill.js';
 import { starter } from './commands/starter.js';
 import * as platform from './commands/platform.js';
-const VERSION = '0.1.11';
+const VERSION = '0.1.12';
 /**
  * A GitHub token, for publishing from a private repository.
  *
