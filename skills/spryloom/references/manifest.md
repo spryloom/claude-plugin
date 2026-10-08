@@ -30,7 +30,7 @@ An app with `frontend: none` and `backend: none` has nothing to run and is refus
 |---|---|---|
 | `visibility` | `private`, `invited`, `company`, `link` | Defaults to `private`. |
 | `domain` | an email domain | Required when visibility is `company`. |
-| `signin` | `google`, `email_link` | Defaults to both. |
+| `signin` | `email_link` | Defaults to `email_link`. `google` is accepted but does nothing yet, so leave it out. |
 | `admins` | email addresses | The publisher is always an admin. |
 
 `link` still requires signing in. It removes the list of who may open the app,
@@ -68,5 +68,7 @@ too; the list is in `references/acting.md`.
 
 ## Never put in this file
 
-Secrets. It is committed to the repository. Use `spry secrets set NAME` and read
-the value from the environment.
+Secrets. It is committed to the repository. Use
+`spry secrets my-app set NAME=value` and read the value from the environment.
+Spryloom has no separate place for ordinary settings: a setting such as a
+reminder threshold is set the same way, or has a default in the code.

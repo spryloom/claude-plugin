@@ -170,14 +170,6 @@ export async function detect(root) {
             file: '.env',
         });
     }
-    if (await exists(join(root, 'node_modules'))) {
-        findings.push({
-            severity: 'warning',
-            code: 'node_modules_present',
-            message: 'node_modules is present and will be excluded from the build.',
-            hint: 'Dependencies are installed from your lockfile during the build, so nothing is lost.',
-        });
-    }
     // ---- hardcoded port ---------------------------------------------------
     if (backend === 'node') {
         for (const candidate of ENTRY_CANDIDATES) {

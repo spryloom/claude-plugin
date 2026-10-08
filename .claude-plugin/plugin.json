@@ -1,7 +1,7 @@
 {
   "name": "spryloom",
   "displayName": "Spryloom",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "description": "Publish the app your agent just built to your team: a private address behind sign-in, with a database, scheduled jobs and email. No servers to set up.",
   "author": {
     "name": "Spryloom",

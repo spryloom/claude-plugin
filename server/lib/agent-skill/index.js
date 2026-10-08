@@ -34,7 +34,6 @@ export const PREVENTION_RULES = {
     env_file_committed: 'never commit a `.env`',
     no_start_command: 'Give the app a start script',
     nothing_to_run: 'nothing to run',
-    node_modules_present: 'clean sandbox',
     dockerfile_missing: 'If a Dockerfile already exists, it is used as-is',
 };
 //# sourceMappingURL=index.js.map

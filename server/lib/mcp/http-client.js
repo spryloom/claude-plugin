@@ -34,12 +34,18 @@ export const WATCH_GIVE_UP_MS = 20 * 60_000;
 export const WATCH_LOST_CONTACT_MS = 60_000;
 /** Read fresh each time: watching awaits between checks, and the answer can change. */
 const aborted = (signal) => signal?.aborted === true;
+// The listener goes when the pause ends either way: one left behind per check
+// passes Node's limit of ten on a long publish, and it prints a leak warning.
 const pause = (ms, signal) => new Promise((resolve) => {
-    const timer = setTimeout(resolve, ms);
-    signal?.addEventListener('abort', () => {
+    const stop = () => {
         clearTimeout(timer);
         resolve();
-    }, { once: true });
+    };
+    const timer = setTimeout(() => {
+        signal?.removeEventListener('abort', stop);
+        resolve();
+    }, ms);
+    signal?.addEventListener('abort', stop, { once: true });
 });
 /** What an operation's failure says, as the failure a caller already knows how to show. */
 function failureOf(operation) {

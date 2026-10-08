@@ -90,10 +90,25 @@ Rules, each of which is refused if broken:
   file name such as `report.pdf` or a word like `Node.js`, and so are
   `mailto:` and `tel:`. Put the link in `button.path`, a path in the app, and
   keep names like those out of the text.
+- **Don't put what people typed into `text`.** An item called "Dell monitor
+  from dell.com" would get the whole email refused. Give counts, and let the
+  button take them to the details: "3 requests are waiting for you".
 - At most 5 a day per app. Send one digest rather than one
   email per item, and always pass a `dedupeKey` so a retry sends once.
 - Never add nodemailer, an SMTP server or an email API. They cannot be reached,
   and they are not how Spryloom sends mail.
+
+### Emailing the admins from a job
+
+A job gets no request headers, so it doesn't know who the admins are. When a
+job needs to email them, such as an approver's daily reminder, do this:
+
+1. Have the server record each visitor's `x-spryloom-email` and `x-spryloom-role`
+   in a `people` table as they use the app.
+2. Have the job email the rows whose role is `admin`.
+
+The owner is an admin, and is recorded the first time they open the app. Do not
+ask the user to type their own address into a setting.
 
 ## Outside APIs
 

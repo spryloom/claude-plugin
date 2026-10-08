@@ -45,8 +45,9 @@ asking them to paste it to you:
 spry secrets my-app set STRIPE_API_KEY=...
 ```
 
-Two things to say when you do. Secrets reach the app when it is published, so
-they publish again afterwards. And an app cannot be given a secret before it
+Two things to say when you do. Secrets reach the app and its jobs when it is
+published, so they publish again afterwards. A job run straight after
+`secrets set` still has the old value. And an app cannot be given a secret before it
 exists, so if the app cannot start without one, the first publish will fail and
 the second will work. Say that in advance rather than letting them discover it.
 
@@ -69,6 +70,16 @@ directory. Anything that must survive a restart belongs in the database.
 
 **Use a database rather than a file.** Files written next to the code disappear
 when the app restarts. If the app needs to remember something, use Postgres.
+Create the tables when the server starts (`CREATE TABLE IF NOT EXISTS`), so a
+first publish needs no extra step.
+
+**Trying it locally.** Nothing signs people in on the user's machine, so:
+- point `DATABASE_URL` at a local Postgres;
+- act as different people by sending the headers yourself:
+  `curl -H 'x-spryloom-email: ann@acme.com' -H 'x-spryloom-role: user' localhost:3000`.
+Email cannot be sent locally, since `SPRYLOOM_GATEWAY_URL` is not set. Print the
+email instead when it is missing. `spry check` shows what Spryloom will see
+before you publish.
 
 ## 2. When the user wants to share it
 
@@ -326,7 +337,7 @@ const role  = request.headers['x-spryloom-role'];   // 'admin' or 'user'
 
 Trust them. Spryloom deletes every `x-spryloom-*` header that arrives with a
 request before it decides anything, so the only way one reaches the app is from
-Spryloom itself. A client that sends one gets its request refused outright.
+Spryloom itself: one a client sends is thrown away, never passed on.
 
 Use the header rather than anything the client submitted. If a form carries an
 author field, ignore it and use `x-spryloom-email`: the header cannot be forged
