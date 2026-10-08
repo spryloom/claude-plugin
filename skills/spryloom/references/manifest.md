@@ -43,6 +43,7 @@ not the front door.
 | `postgres` | `true` gives the app a database, reachable through `DATABASE_URL`. |
 | `tables` | The tables the app stores. Shown on the label page, so a coworker can see what it holds. Required when `postgres` is true. |
 | `uploads` | `false`. `true` is refused: file uploads are not available yet. |
+| `lists` | Pages only: lists a page's scripts save at `/~data`, each `shared` or `own`. Names are lowercase letters, digits and hyphens; at most 20. An app is refused lists: it has its own database. |
 
 Declaring tables without a database, or a database without tables, is refused.
 The first is a contradiction; the second leaves the label page unable to say what
@@ -52,7 +53,7 @@ the app stores.
 
 | Field | Notes |
 |---|---|
-| `jobs` | Work on a schedule: `name`, `command`, five-field cron `schedule`, optional `timezone` and `timeout_minutes`. At most once every 10 hours during the beta. |
+| `jobs` | Work on a schedule: `name`, `command`, five-field cron `schedule`, optional `timezone` and `timeout_minutes`. At most once every 10 hours. |
 | `email` | `true` lets the app email the people who use it, as notifications through Spryloom. |
 | `egress` | Outside hosts the app may reach, each from Spryloom's list. |
 

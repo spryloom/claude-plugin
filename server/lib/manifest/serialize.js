@@ -39,6 +39,7 @@ export function serializeManifest(manifest) {
             postgres: manifest.data.postgres,
             tables: [...manifest.data.tables],
             uploads: manifest.data.uploads,
+            ...(manifest.data.lists !== undefined && { lists: { ...manifest.data.lists } }),
         },
         // Written only when declared, so a manifest from before M1* serialises to
         // the same file it always did.

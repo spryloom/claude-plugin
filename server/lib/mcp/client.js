@@ -34,4 +34,20 @@ export class SpryloomFailure extends Error {
         this.logs = options.logs ?? [];
     }
 }
+/**
+ * Which page someone means: its address (`https://gear-wall.acme-com.spryloom.app`,
+ * with or without `https://` and a path), or a slug in their own workspace.
+ * Undefined when it is neither.
+ */
+export function pageAddress(input, ownWorkspace) {
+    const text = input.trim().replace(/^https?:\/\//i, '').split(/[/?#]/)[0]?.toLowerCase() ?? '';
+    const SLUG = /^[a-z0-9]([a-z0-9-]{0,62})$/;
+    if (SLUG.test(text))
+        return { workspace: ownWorkspace, slug: text };
+    const labels = text.split('.');
+    const [slug, workspace] = labels;
+    if (labels.length >= 4 && slug !== undefined && workspace !== undefined && SLUG.test(slug) && SLUG.test(workspace))
+        return { workspace, slug };
+    return undefined;
+}
 //# sourceMappingURL=client.js.map

@@ -16,7 +16,7 @@ jobs:
     timezone: America/New_York
 ```
 
-- `schedule` is five-field cron. During the beta a job runs **at most once
+- `schedule` is five-field cron. A job runs **at most once
   every 10 hours**: once or twice a day. `"0 9 * * *"` and `"0 9,19 * * *"` are
   fine; `"0 * * * *"` is refused.
 - `timezone` is an IANA name such as `Europe/London`. Ask the user which time
@@ -90,7 +90,7 @@ Rules, each of which is refused if broken:
   file name such as `report.pdf` or a word like `Node.js`, and so are
   `mailto:` and `tel:`. Put the link in `button.path`, a path in the app, and
   keep names like those out of the text.
-- At most 5 a day per app during the beta. Send one digest rather than one
+- At most 5 a day per app. Send one digest rather than one
   email per item, and always pass a `dedupeKey` so a retry sends once.
 - Never add nodemailer, an SMTP server or an email API. They cannot be reached,
   and they are not how Spryloom sends mail.

@@ -114,11 +114,70 @@ costs the user nothing to keep, and sits behind the same sign-in as an app.
   cdn.jsdelivr.net and unpkg.com, and fonts from Google Fonts. Anything else it
   loads must be saved into the folder and linked there, or browsers block it.
 - **What it can't do:** a page's scripts can only talk to the page itself, so it
-  can't call an API or save anything. Don't declare a database, jobs, email or
-  outside services for a page; they are refused.
-- **When it outgrows a page:** once it needs saved data, a schedule or email, add
-  a `package.json` with a start script and publish again under the same name. It
-  becomes an app at the same address.
+  can't call an outside API. It can save lists of records (next section). Don't
+  declare a database, jobs, email or outside services for a page; they are
+  refused.
+- **When it outgrows a page:** once it needs a schedule, email, secrets, outside
+  services, rules enforced on a server, or queries across related records, add a
+  `package.json` with a start script, `data.postgres: true`, and publish again
+  under the same name. It becomes an app at the same address, and any saved
+  records are copied into tables named `page_<list>`.
+
+### A page that saves data
+
+A checklist, a sign-up sheet, a sign-off, an equipment checkout: a tool that keeps
+a few lists of records and needs nothing else is a **page that saves data**. It
+publishes as fast as a page, needs no server or database, and doesn't count
+toward the workspace's apps. Choose it over an app whenever it fits, and tell the
+person which you chose and why: "a page that saves data, because it's a shared
+list; if you later want a reminder email, it becomes an app."
+
+Declare the lists in `spryloom.yaml`, each `shared` (everyone who can open the
+page sees every record) or `own` (each person sees what they saved; the page's
+owner and admins see all):
+
+```yaml
+runtime:
+  frontend: static
+  backend: none
+data:
+  lists:
+    checkouts: shared
+    requests: own
+```
+
+The page's own scripts save and read at `/~data`, on the page's own address.
+Spryloom stamps every record with who saved it and when, from their sign-in, so
+never ask for a name or an email in a form.
+
+```js
+async function save(list, record) {
+  const answer = await fetch(`/~data/${list}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Spryloom-Request': 'data' },
+    body: JSON.stringify(record),
+  });
+  const body = await answer.json();
+  if (!answer.ok) throw new Error(body.message); // written for the person: show it
+  return body; // { id, data, savedBy, savedAt, updatedBy, updatedAt }
+}
+
+const { records } = await (await fetch('/~data/checkouts')).json();
+// Change: PUT /~data/<list>/<id> with the same headers. Delete: DELETE /~data/<list>/<id>.
+// Who is signed in: (await (await fetch('/~data')).json()).me.email
+```
+
+- **Every write sends `Spryloom-Request: data`.** Without it the request is refused.
+- **Show saved values with `textContent`, never `innerHTML`.** Records are typed by
+  other people, and markup in one would run in everyone's browser.
+- Only the person who saved a record, or the page's admins, can change or delete
+  it. Show those buttons only on the person's own records, and show the `message`
+  of any refusal as it is.
+- A record is a JSON object up to 64 KB; a list holds up to 10,000. To see changes
+  others made, poll `GET /~data/<list>?changedSince=<cursor>`, using the `cursor`
+  from the last answer; it returns what changed and the ids `deleted`.
+- `spry data <page>` shows a page's lists; `spry data export <page>` saves every
+  record as JSON and CSV.
 
 ### Write the manifest
 

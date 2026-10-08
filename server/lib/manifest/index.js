@@ -1,4 +1,4 @@
-export { DEFAULT_SIGNIN, JOB_RULES } from './types.js';
+export { DEFAULT_SIGNIN, JOB_RULES, LIST_RULES } from './types.js';
 export { ManifestError, formatIssues } from './types.js';
 export { validateManifest, deriveSlug, slugProblem } from './validate.js';
 export { CronError, describeSchedule, isTimeZone, nextRun, parseCron, shortestGap, } from './cron.js';

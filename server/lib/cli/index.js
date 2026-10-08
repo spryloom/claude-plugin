@@ -17,7 +17,8 @@ import { init } from './commands/init.js';
 import { skill } from './commands/skill.js';
 import { starter } from './commands/starter.js';
 import * as platform from './commands/platform.js';
-const VERSION = '0.1.12';
+import { exportPageData, pageAccessLog, showPageData } from './commands/page-data.js';
+const VERSION = '0.1.13';
 /**
  * A GitHub token, for publishing from a private repository.
  *
@@ -56,6 +57,9 @@ Usage
   spry archive <app>                   Stop serving an app while keeping its data
   spry restore <app>                   Restore an archived app and its retained data
   spry export <app>                    Print a portable app metadata export as JSON
+  spry data <page>                     A page's saved lists and how much they hold
+  spry data export <page>              Save every record of a page, as JSON and CSV
+  spry data log <page>                 Who read a page's data from outside it
   spry delete <app> <app>              Remove an app, its database and its data
 
   spry starter                                      Starter apps you can copy and publish
@@ -170,6 +174,38 @@ export async function run(argv, output = consoleOutput) {
             return platform.whoami(context);
         case 'apps':
             return platform.apps(context);
+        case 'data': {
+            // `spry data export <page>`, `spry data log <page>`, or `spry data <page>` (D113).
+            if (positionals[1] === 'log') {
+                const page = positionals[2];
+                if (page === undefined) {
+                    output.err('Which page?');
+                    output.err('');
+                    output.err('  spry data log <page>');
+                    return 2;
+                }
+                return pageAccessLog(context, page);
+            }
+            if (positionals[1] === 'export') {
+                const page = positionals[2];
+                if (page === undefined) {
+                    output.err('Which page?');
+                    output.err('');
+                    output.err('  spry data export <page>');
+                    return 2;
+                }
+                return exportPageData(context, page);
+            }
+            const page = positionals[1];
+            if (page === undefined) {
+                output.err('Which page?');
+                output.err('');
+                output.err('  spry data <page>');
+                output.err('  spry data export <page>');
+                return 2;
+            }
+            return showPageData(context, page);
+        }
         case 'export': {
             const slug = positionals[1];
             if (slug === undefined) {
@@ -349,7 +385,7 @@ export async function run(argv, output = consoleOutput) {
         default:
             output.err(`"${command}" is not a spry command.`);
             output.err('');
-            output.err('Available: login, publish, apps, export, invite, uninvite, secrets, logs, jobs, rollback, restart, archive, restore, delete, domain, starter, init, check, skill, mcp, whoami, logout.');
+            output.err('Available: login, publish, apps, data, export, invite, uninvite, secrets, logs, jobs, rollback, restart, archive, restore, delete, domain, starter, init, check, skill, mcp, whoami, logout.');
             output.err('Run `spry --help` for details.');
             return 2;
     }

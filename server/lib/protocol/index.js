@@ -120,6 +120,10 @@ export const routes = {
     apps: () => '/api/v1/apps',
     app: (slug) => `/api/v1/apps/${encodeURIComponent(slug)}`,
     exportApp: (slug) => `/api/v1/apps/${encodeURIComponent(slug)}/export`,
+    /** A page's saved data (D113), as the signed-in person. By workspace, so a page someone was invited to elsewhere works too. */
+    pageData: (workspace, slug) => `/api/v1/pages/${encodeURIComponent(workspace)}/${encodeURIComponent(slug)}/data`,
+    /** Every record of a page, for its owner and admins (D113). */
+    pageDataExport: (workspace, slug) => `/api/v1/pages/${encodeURIComponent(workspace)}/${encodeURIComponent(slug)}/data/export`,
     publish: (slug) => `/api/v1/apps/${encodeURIComponent(slug)}/publish`,
     operation: (id) => `/api/v1/operations/${encodeURIComponent(id)}`,
     activeOperation: (slug) => `/api/v1/apps/${encodeURIComponent(slug)}/operation`,
@@ -175,6 +179,8 @@ export const patterns = {
     apps: '/api/v1/apps',
     app: '/api/v1/apps/:slug',
     exportApp: '/api/v1/apps/:slug/export',
+    pageData: '/api/v1/pages/:workspace/:slug/data',
+    pageDataExport: '/api/v1/pages/:workspace/:slug/data/export',
     publish: '/api/v1/apps/:slug/publish',
     operation: '/api/v1/operations/:id',
     activeOperation: '/api/v1/apps/:slug/operation',

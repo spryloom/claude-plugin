@@ -18,7 +18,14 @@
  * Google is added this becomes the place that changes.
  */
 export const DEFAULT_SIGNIN = ['email_link'];
-/** The limits a job is held to during the beta (D85). */
+/** The limits on a page's lists (D113, spec §3.1). */
+export const LIST_RULES = {
+    maxLists: 20,
+    /** Lowercase letters, digits and hyphens, starting with a letter, up to 40. */
+    name: /^[a-z][a-z0-9-]{0,39}$/,
+    modes: ['shared', 'own'],
+};
+/** The limits a job is held to (D85). */
 export const JOB_RULES = {
     maxJobs: 5,
     /** The shortest gap allowed between two runs of one job. */

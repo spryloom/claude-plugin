@@ -1,6 +1,6 @@
 import { CronError, isTimeZone, parseCron, shortestGap } from './cron.js';
 import { egressProblem } from './egress-registry.js';
-import { DEFAULT_SIGNIN, JOB_RULES, ManifestError, } from './types.js';
+import { DEFAULT_SIGNIN, JOB_RULES, LIST_RULES, ManifestError, } from './types.js';
 const FRONTENDS = ['react', 'static', 'none'];
 const BACKENDS = ['node', 'none'];
 const VISIBILITIES = ['private', 'invited', 'company', 'link'];
@@ -285,6 +285,12 @@ export function validateManifest(input, options = {}) {
     if (uploads) {
         collector.add('data.uploads', 'asks for file uploads, which Spryloom does not store yet.', 'File uploads arrive in the next release. Set data.uploads to false to publish now, and keep what matters in the database.');
     }
+    // A page's saved lists (D113). An app has a database for this, and a page with
+    // a server isn't a page, so lists come only with no backend and no database.
+    const lists = readLists(dataRaw, collector);
+    if (lists !== undefined && (backend !== 'none' || postgres)) {
+        collector.add('data.lists', 'is for pages, and this is an app: it has a server or a database.', 'An app keeps its data in its own database. Remove data.lists, and use data.postgres and data.tables instead.');
+    }
     // ---- jobs, email and outside hosts (M1*) --------------------------------
     const jobs = readJobs(input, collector, options.now ?? Date.now());
     const email = readTopBoolean(input, 'email', collector);
@@ -307,11 +313,44 @@ export function validateManifest(input, options = {}) {
             signin,
             admins,
         },
-        data: { postgres, tables, uploads },
+        data: { postgres, tables, uploads, ...(lists !== undefined && { lists }) },
         jobs,
         email,
         egress,
     };
+}
+/**
+ * A page's lists: a group of names, each `shared` or `own` (D113, spec §3.1).
+ * Undefined when there are none, so a page that saves nothing says nothing.
+ */
+function readLists(data, collector) {
+    const raw = data['lists'];
+    if (raw === undefined || raw === null)
+        return undefined;
+    if (!isRecord(raw)) {
+        collector.add('data.lists', `must be a group of list names, each shared or own, but is ${describeType(raw)}.`, 'For example:  lists: { checkouts: shared }');
+        return undefined;
+    }
+    const entries = Object.entries(raw);
+    if (entries.length === 0)
+        return undefined;
+    if (entries.length > LIST_RULES.maxLists) {
+        collector.add('data.lists', `A page can have at most ${LIST_RULES.maxLists} lists, and this one declares ${entries.length}.`);
+        return undefined;
+    }
+    const lists = {};
+    for (const [name, mode] of entries) {
+        if (!LIST_RULES.name.test(name)) {
+            collector.add(`data.lists.${name}`, 'names use lowercase letters, digits and hyphens, starting with a letter, up to 40 characters.');
+            continue;
+        }
+        if (!LIST_RULES.modes.includes(mode)) {
+            collector.add(`data.lists.${name}`, 'must be shared or own.', 'shared: everyone who can open the page sees every record. own: each person sees what they saved.');
+            continue;
+        }
+        lists[name] = mode;
+    }
+    return lists;
 }
 const JOB_NAME = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 const JOB_NAME_MAX = 40;
@@ -330,7 +369,7 @@ function gapInWords(ms) {
  * Every rule a scheduler would otherwise discover at 9:00 on a Monday is
  * checked here, where the person who wrote the file is still looking at it: a
  * schedule that is not cron, a time zone that does not exist, one that runs
- * more often than the beta allows (D85), and one that never runs at all.
+ * more often than the limit allows (D85), and one that never runs at all.
  */
 function readJobs(root, collector, now) {
     const raw = root['jobs'];
@@ -397,7 +436,7 @@ function readJobs(root, collector, now) {
                     }
                     else if (closest.gap < minimum) {
                         scheduleOk = false;
-                        collector.add(`${path}.schedule`, `"${schedule}" runs ${gapInWords(closest.gap)} apart at its closest.`, `During the beta a job can run at most once every ${JOB_RULES.minIntervalHours} hours. For example: schedule: "0 9 * * *" runs every day at 9:00.`);
+                        collector.add(`${path}.schedule`, `"${schedule}" runs ${gapInWords(closest.gap)} apart at its closest.`, `A job can run at most once every ${JOB_RULES.minIntervalHours} hours. For example: schedule: "0 9 * * *" runs every day at 9:00.`);
                     }
                 }
             }

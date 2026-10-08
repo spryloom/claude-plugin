@@ -275,6 +275,34 @@ export class HttpSpryloomClient {
             ...(body.kind === 'page' && { kind: 'page' }),
         };
     }
+    async pageData(page, call) {
+        const response = await this.send({
+            method: 'POST',
+            path: routes.pageData(page.workspace, page.slug),
+            contentType: 'application/json',
+            body: JSON.stringify(call),
+        });
+        if (!response.ok)
+            throw await this.pageDataFailure(response, page);
+        return (await readJson(response)) ?? {};
+    }
+    async exportPageData(page) {
+        const response = await this.send({ method: 'GET', path: routes.pageDataExport(page.workspace, page.slug) });
+        if (!response.ok)
+            throw await this.pageDataFailure(response, page);
+        return response.text();
+    }
+    /**
+     * A page-data refusal. The data service's own refusals are `{ error, message }`,
+     * written for a person to read; the API's are in its usual shape.
+     */
+    async pageDataFailure(response, page) {
+        const body = await response.clone().json().catch(() => undefined);
+        if (body !== undefined && typeof body.message === 'string' && typeof body.error === 'string') {
+            return new SpryloomFailure({ reason: errorCodes.invalid, message: body.message, hint: '' });
+        }
+        return this.toFailure(response, { fallbackReason: errorCodes.invalid, subject: `use the saved data of "${page.slug}"` });
+    }
     async exportApp(slug) {
         const response = await this.send({ method: 'GET', path: routes.exportApp(slug) });
         if (!response.ok) {
