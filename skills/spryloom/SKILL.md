@@ -225,7 +225,10 @@ per machine.
 
 If the Spryloom tools are not available at all, use the command line. When
 `spry` is not installed, `npx -y spryloom` is the same command and needs nothing
-installed, so read every `spry` in this skill that way. Signing in waits for the
+installed, so read every `spry` in this skill that way. If installing it fails
+with `EACCES: permission denied`, use `npx -y spryloom`: never retry with
+`sudo`, and don't change the person's npm settings or shell profile unless they
+ask. Signing in waits for the
 person to click a link and shows a code they must see, so ask them to run it
 themselves (in Claude Code they can type it after `!`):
 
