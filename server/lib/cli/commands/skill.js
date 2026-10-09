@@ -12,7 +12,7 @@
  */
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, join, relative, resolve } from 'node:path';
-import { readActingReference, readSkill, readManifestReference } from '../../agent-skill/index.js';
+import { readActingReference, readArtifactReference, readSkill, readManifestReference } from '../../agent-skill/index.js';
 import { painter } from '../ui.js';
 /**
  * Where Claude Code looks for a project's skills.
@@ -37,6 +37,7 @@ export async function skill(root, options, context) {
         [join(SKILL_DIRECTORY, 'SKILL.md'), await readSkill()],
         [join(SKILL_DIRECTORY, 'references', 'manifest.md'), await readManifestReference()],
         [join(SKILL_DIRECTORY, 'references', 'acting.md'), await readActingReference()],
+        [join(SKILL_DIRECTORY, 'references', 'artifact.md'), await readArtifactReference()],
     ];
     const already = [];
     for (const [path] of files) {

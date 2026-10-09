@@ -54,7 +54,7 @@ export const PUBLISH_CONTENT_TYPE = 'application/gzip';
 /** The stages each kind goes through, in order. Clients draw these. */
 export const OPERATION_STAGES = {
     publish: ['preparing', 'database', 'building', 'starting', 'health', 'jobs', 'switching'],
-    delete: ['stopping', 'machine', 'database', 'secrets', 'domains', 'verifying'],
+    delete: ['stopping', 'domains', 'machine', 'database', 'secrets', 'verifying'],
     rollback: ['preparing', 'starting', 'health', 'jobs', 'switching'],
     restore: ['preparing', 'starting', 'health', 'jobs'],
     restart: ['starting', 'health'],

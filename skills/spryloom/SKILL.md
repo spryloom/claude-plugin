@@ -190,6 +190,11 @@ const { records } = await (await fetch('/~data/checkouts')).json();
 - `spry data <page>` shows a page's lists; `spry data export <page>` saves every
   record as JSON and CSV.
 
+**If the person wants to bring a Claude artifact** (a `claude.ai/artifact/…`
+link, or something Claude made for them that their team now uses), read
+`references/artifact.md` first. It becomes a page that saves data, with its
+saved records brought across, and there are rules there that keep it working.
+
 ### Write the manifest
 
 Write `spryloom.yaml` in the project root before publishing. You know what the

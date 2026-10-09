@@ -21,6 +21,10 @@ export async function readManifestReference() {
 export async function readActingReference() {
     return readFile(join(skillDirectory(), 'references', 'acting.md'), 'utf8');
 }
+/** Bringing a Claude artifact: it becomes a page that saves data, with its records. */
+export async function readArtifactReference() {
+    return readFile(join(skillDirectory(), 'references', 'artifact.md'), 'utf8');
+}
 /**
  * Every failure the platform can report, mapped to the phrase in the skill that
  * teaches an agent to avoid it.
