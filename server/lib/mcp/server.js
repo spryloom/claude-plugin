@@ -37,7 +37,7 @@ export function createServer(context) {
     server.tool('publish', 'Publish this app to Spryloom so the user\'s coworkers can use it behind company sign-in. Ask who should be able to use it before calling. A folder with only static files (index.html, no package.json), or a single .html or .md file, publishes as a page: no server, opens instantly, and can become an app at the same address later.', {
         root: z
             .string()
-            .describe('Where the app is: an absolute path to the folder, a path to a zip of it, a GitHub repository such as github.com/owner/repo (optionally with @branch), or one .html or .md file to publish as a page.'),
+            .describe('Where the app is: an absolute path to the folder, a path to a zip of it, a GitHub repository such as github.com/owner/repo (optionally with @branch), or one folder of one such as github.com/owner/repo/tree/main/apps/web, or one .html or .md file to publish as a page.'),
         visibility: VISIBILITY.describe('Who should be able to use it.'),
         description: z
             .string()

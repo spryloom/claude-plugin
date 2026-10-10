@@ -14,11 +14,11 @@
 import { mkdtemp, mkdir, rm, stat, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { basename, dirname, join, resolve as resolvePath } from 'node:path';
-import { RepositoryError, describeRepository, downloadRepository, commonRoot, parseRepository, } from './github.js';
+import { RepositoryError, describeRepository, downloadRepositoryAt, commonRoot, parseRepository, } from './github.js';
 import { ZipError, readZip } from './zip.js';
 import { PAGE_FILE, pageFolderFromFile } from './page-file.js';
 export { MAX_ENTRIES, MAX_EXPANDED_BYTES, MAX_ZIP_BYTES, ZipError, entryIsSafe, readZip, } from './zip.js';
-export { DOWNLOAD_TIMEOUT_MS, RepositoryError, commonRoot, describeRepository, downloadRepository, parseRepository, } from './github.js';
+export { DOWNLOAD_TIMEOUT_MS, RepositoryError, commonRoot, describeRepository, downloadRepository, downloadRepositoryAt, parseRepository, } from './github.js';
 export { PAGE_FILE, PageFileError, localReferences, pageFolderFromFile, renderMarkdownPage, titleOf } from './page-file.js';
 /**
  * Work out what someone meant.
@@ -117,16 +117,30 @@ export async function resolveSource(source, options = {}) {
             };
         }
         case 'repository': {
-            const archive = await downloadRepository(source.reference, options);
+            const { reference, archive } = await downloadRepositoryAt(source.reference, options);
             const entries = readZip(archive);
             // A zipball always wraps everything in one generated directory named for
             // the commit. Publishing it as it stands would put the app one level below
             // where the manifest says it is.
-            const root = await write(entries, commonRoot(entries.map((entry) => entry.path)));
+            const wrapper = commonRoot(entries.map((entry) => entry.path));
+            // One folder of the repository, such as one starter of several, is
+            // published as though it were the whole of it.
+            const strip = reference.folder === undefined
+                ? wrapper
+                : [...(wrapper === undefined ? [] : [wrapper]), reference.folder].join('/');
+            const kept = reference.folder === undefined
+                ? entries
+                : entries.filter((entry) => entry.path === strip || entry.path.startsWith(`${strip}/`));
+            if (reference.folder !== undefined && !kept.some((entry) => !entry.isDirectory)) {
+                const { folder, ...repository } = reference;
+                throw new RepositoryError(`There is no folder ${folder} in ${describeRepository(repository)}.`, 'Check the folder. It is case-sensitive, and is the path shown above the file list on GitHub.');
+            }
+            const root = await write(kept, strip);
             return {
                 root,
-                describe: describeRepository(source.reference),
-                suggestedName: source.reference.repo,
+                describe: describeRepository(reference),
+                // A starter in a repository of several is called what its folder is called.
+                suggestedName: reference.folder?.split('/').at(-1) ?? reference.repo,
                 temporary: true,
                 dispose: async () => rm(root, { recursive: true, force: true }),
             };

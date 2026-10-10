@@ -50,10 +50,28 @@ export function parseRepository(input) {
         return undefined;
     if (!/^[A-Za-z0-9._-]+$/.test(owner) || !/^[A-Za-z0-9._-]+$/.test(repo))
         return undefined;
-    // A pasted address-bar URL carries `/tree/<branch>` after the repository.
-    const branchFromUrl = rest[0] === 'tree' && rest[1] !== undefined ? rest.slice(1).join('/') : undefined;
+    // A pasted address-bar URL carries `/tree/<branch>[/<folder>]` after the
+    // repository. Anything else after it is a folder, written the way a person
+    // would type one: `github.com/acme/tools/apps/status@main`.
+    const fromTree = rest[0] === 'tree' && rest[1] !== undefined;
+    const branchFromUrl = fromTree ? rest.slice(1).join('/') : undefined;
+    const folderSegments = fromTree ? [] : rest;
+    // `..` would climb out of the repository, and `.` means nothing; neither is a
+    // folder anyone links to, so the input is not a repository at all.
+    const climbs = (segment) => segment === '.' || segment === '..';
+    if (folderSegments.some(climbs) || (fromTree && rest.slice(1).some(climbs)))
+        return undefined;
     const chosen = ref ?? branchFromUrl;
-    return { owner, repo, ...(chosen !== undefined && chosen !== '' && { ref: chosen }) };
+    const folder = folderSegments.join('/');
+    return {
+        owner,
+        repo,
+        ...(chosen !== undefined && chosen !== '' && { ref: chosen }),
+        ...(folder !== '' && { folder }),
+        // Only the URL's own ref can hide a folder. An `@ref` the person typed is
+        // a ref and nothing else.
+        ...(ref === undefined && fromTree && rest.length > 2 && { refMayHoldFolder: true }),
+    };
 }
 function splitOnce(value, separator) {
     const at = value.search(separator);
@@ -63,15 +81,21 @@ function splitOnce(value, separator) {
 }
 /** How the reference reads back to a person. */
 export function describeRepository(reference) {
-    const where = `github.com/${reference.owner}/${reference.repo}`;
+    const where = `github.com/${reference.owner}/${reference.repo}${reference.folder === undefined ? '' : `/${reference.folder}`}`;
+    // Not yet settled into a branch and a folder: read it back as it was written.
+    if (reference.refMayHoldFolder === true && reference.ref !== undefined)
+        return `${where}/tree/${reference.ref}`;
     return reference.ref === undefined ? where : `${where} at ${reference.ref}`;
 }
 export class RepositoryError extends Error {
     hint;
-    constructor(message, hint) {
+    /** GitHub's answer, when GitHub gave one. */
+    status;
+    constructor(message, hint, status) {
         super(message);
         this.name = 'RepositoryError';
         this.hint = hint;
+        this.status = status;
     }
 }
 /** How long to wait for GitHub before giving up. */
@@ -114,6 +138,58 @@ export async function downloadRepository(reference, options = {}) {
     return archive;
 }
 /**
+ * Download a repository, settling where the branch ends and the folder begins.
+ *
+ * An address-bar URL such as `…/tree/main/examples/app` does not say which
+ * part is the branch. Git refuses a branch `main` beside a branch
+ * `main/examples`, because one would be a file and the other a folder of the
+ * same name, so at most one way of splitting it names a branch. The shortest
+ * branch is tried first, because that is nearly always `main`; a 404 moves on
+ * to the next. The last attempt is the whole thing as a branch, which is what
+ * the URL meant before folders were read from it.
+ *
+ * Returns the reference as it was settled, so what is described and where the
+ * folder is cut from are both right.
+ */
+export async function downloadRepositoryAt(reference, options = {}) {
+    if (reference.refMayHoldFolder !== true || reference.ref === undefined) {
+        return { reference, archive: await downloadRepository(reference, options) };
+    }
+    const segments = reference.ref.split('/');
+    for (let take = 1; take < segments.length; take += 1) {
+        const candidate = {
+            owner: reference.owner,
+            repo: reference.repo,
+            ref: segments.slice(0, take).join('/'),
+            folder: [...segments.slice(take), ...(reference.folder === undefined ? [] : [reference.folder])].join('/'),
+        };
+        try {
+            return { reference: candidate, archive: await downloadRepository(candidate, options) };
+        }
+        catch (error) {
+            if (!(error instanceof RepositoryError) || error.status !== 404)
+                throw error;
+        }
+    }
+    const whole = {
+        owner: reference.owner,
+        repo: reference.repo,
+        ref: reference.ref,
+        ...(reference.folder !== undefined && { folder: reference.folder }),
+    };
+    try {
+        return { reference: whole, archive: await downloadRepository(whole, options) };
+    }
+    catch (error) {
+        // Every way of reading it was refused. Say so about what the person wrote,
+        // with the hint that names the folder as one of the things to check.
+        if (error instanceof RepositoryError && error.status === 404) {
+            throw explainGitHub(404, reference, options.token);
+        }
+        throw error;
+    }
+}
+/**
  * Say what GitHub's answer means.
  *
  * A 404 is the interesting one: GitHub says that for a repository that does not
@@ -124,9 +200,12 @@ function explainGitHub(status, reference, token) {
     const where = describeRepository(reference);
     const signedIn = token !== undefined && token !== '';
     if (status === 404) {
+        const check = reference.folder !== undefined || reference.refMayHoldFolder === true
+            ? 'Check the name, the branch and the folder.'
+            : 'Check the name and the branch.';
         return new RepositoryError(`${where} could not be found.`, signedIn
-            ? 'Check the name and the branch. If it is private, the token needs access to it.'
-            : 'Check the name and the branch. If it is private, set GITHUB_TOKEN to a token that can read it.');
+            ? `${check} If it is private, the token needs access to it.`
+            : `${check} If it is private, set GITHUB_TOKEN to a token that can read it.`, status);
     }
     if (status === 401 || status === 403) {
         return new RepositoryError(signedIn
