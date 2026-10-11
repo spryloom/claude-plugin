@@ -1,6 +1,6 @@
 ---
 name: spryloom
-description: Publish an app you have just built so the user's coworkers can use it, behind company sign-in, in one step. Use when the user says the app works and asks how to share it, give it to their team, put it somewhere, or get other people using it. Also use while building any app the user intends to share, so it is written in a way that deploys.
+description: Publish an app you have just built so the user's coworkers can use it, behind company sign-in, in one step. Use when the user says the app works and asks how to share it, give it to their team, put it somewhere, put it online, host it, deploy it, send someone a link to it, or let a coworker, a partner or a client use it too ("so Tony can tick things off", "so my team can see it"). Also use when what they want needs to keep running after their laptop is closed, such as a daily or weekly email reminder, a scheduled job, a shared checklist or tracker several people update, or a page that saves what people enter. Use while building any app the user intends to share, so it is written in a way that deploys.
 ---
 
 # Publishing to Spryloom

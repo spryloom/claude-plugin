@@ -1,7 +1,7 @@
 {
   "name": "spryloom",
   "displayName": "Spryloom",
-  "version": "0.1.18",
+  "version": "0.1.19",
   "description": "Publish the app your agent just built to your team: a private address behind sign-in, with a database, scheduled jobs and email. No servers to set up.",
   "author": {
     "name": "Spryloom",
@@ -18,9 +18,15 @@
   "keywords": [
     "publish",
     "deploy",
+    "share",
+    "host",
     "internal-tools",
-    "hosting",
     "team",
+    "coworkers",
+    "sign-in",
+    "checklist",
+    "email-reminders",
+    "scheduled-jobs",
     "mcp"
   ],
   "icon": "./.claude-plugin/icon.png"

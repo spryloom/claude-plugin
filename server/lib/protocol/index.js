@@ -111,6 +111,8 @@ export const routes = {
     loginStart: () => '/api/v1/login',
     loginPoll: (requestId) => `/api/v1/login/${encodeURIComponent(requestId)}`,
     loginApprove: (requestId) => `/api/v1/login/${encodeURIComponent(requestId)}/approve`,
+    /** The answer to "how did you find Spryloom?", once, after a first sign-in (D127). */
+    loginFound: () => '/api/v1/login/found',
     whoAmI: () => '/api/v1/me',
     secrets: (slug) => `/api/v1/apps/${encodeURIComponent(slug)}/secrets`,
     secret: (slug, name) => `/api/v1/apps/${encodeURIComponent(slug)}/secrets/${encodeURIComponent(name)}`,
@@ -172,6 +174,7 @@ export const patterns = {
     loginStart: '/api/v1/login',
     loginPoll: '/api/v1/login/:requestId',
     loginApprove: '/api/v1/login/:requestId/approve',
+    loginFound: '/api/v1/login/found',
     whoAmI: '/api/v1/me',
     secrets: '/api/v1/apps/:slug/secrets',
     secret: '/api/v1/apps/:slug/secrets/:name',
@@ -220,4 +223,5 @@ export const errorCodes = {
 };
 /** The oldest spry the API accepts publishes and deletes from (D99). */
 export const MIN_CLIENT_VERSION = '0.1.4';
+export * from './found.js';
 //# sourceMappingURL=index.js.map

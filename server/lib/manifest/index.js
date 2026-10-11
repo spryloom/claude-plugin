@@ -5,4 +5,5 @@ export { CronError, describeSchedule, isTimeZone, nextRun, parseCron, shortestGa
 export { EGRESS_DOCS_URL, EGRESS_HELD, EGRESS_REGISTRY, EGRESS_REQUESTS_TO, allowedFor, egressProblem, labelFor, registryEntry, } from './egress-registry.js';
 export { parseManifest, MANIFEST_FILENAME } from './parse.js';
 export { serializeManifest } from './serialize.js';
+export { FEATURES, summarizeManifest } from './summary.js';
 //# sourceMappingURL=index.js.map
