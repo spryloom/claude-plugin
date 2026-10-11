@@ -18,6 +18,7 @@
  */
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { Account } from './account.js';
+import { mcpClientIs, servingMcp } from './client-info.js';
 import { createServer } from './server.js';
 import { baseUrlFrom, tokenFor } from './session.js';
 /**
@@ -30,7 +31,11 @@ export async function serveOverStdio(env = process.env, clientVersion) {
     const baseUrl = baseUrlFrom(env);
     const token = await tokenFor(baseUrl, env);
     const account = new Account({ baseUrl, token, env, clientVersion, reload: () => tokenFor(baseUrl, env) });
+    // From here on, requests come through an agent's tools, and the agent says
+    // who it is when it connects (D126).
+    servingMcp();
     const server = createServer({ account });
+    server.server.oninitialized = () => mcpClientIs(server.server.getClientVersion());
     await server.connect(new StdioServerTransport());
     return 'serving';
 }

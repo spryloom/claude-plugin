@@ -18,6 +18,7 @@ import { gzip } from 'node:zlib';
 import { promisify } from 'node:util';
 import { AUTH_HEADER, CLIENT_HEADER, POLL_AUTH, PUBLISH_CONTENT_TYPE, errorCodes, isApiError, routes, } from '../protocol/index.js';
 import { SpryloomFailure, } from './client.js';
+import { clientHeader } from './client-info.js';
 /** Long enough for a slow network, short enough that a hung request is not forever. */
 export const DEFAULT_TIMEOUT_MS = 30_000;
 /**
@@ -556,8 +557,9 @@ export class HttpSpryloomClient {
             headers[AUTH_HEADER] = `${AUTH_SCHEME} ${token}`;
         if (options.contentType !== undefined)
             headers['content-type'] = options.contentType;
+        // `spry/<version>`, then how it is being used (D126): see client-info.ts.
         if (this.clientVersion !== undefined)
-            headers[CLIENT_HEADER] = `spry/${this.clientVersion}`;
+            headers[CLIENT_HEADER] = clientHeader(this.clientVersion);
         try {
             return await this.fetchImpl(url, {
                 method: options.method,

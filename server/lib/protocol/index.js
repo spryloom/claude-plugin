@@ -97,6 +97,7 @@ export const STAGE_LABELS = {
 /** What a stage is called on screen, for the kind of operation it belongs to. */
 export const stageLabel = (kind, stage) => STAGE_LABELS[`${kind}:${stage}`] ?? STAGE_LABELS[stage] ?? stage.charAt(0).toUpperCase() + stage.slice(1);
 export * from './notify.js';
+export * from './client.js';
 // ---------------------------------------------------------------------------
 // Paths
 // ---------------------------------------------------------------------------

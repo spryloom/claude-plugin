@@ -5,4 +5,5 @@ export { SpryloomFailure, pageAddress, } from './client.js';
 export { HttpSpryloomClient, packDirectory, signIn, DEFAULT_TIMEOUT_MS, PUBLISH_TIMEOUT_MS, } from './http-client.js';
 export { baseUrlFrom, saveSession, sessionPath, tokenFor } from './session.js';
 export { serveOverStdio } from './stdio.js';
+export { agentFrom, clientHeader, describeThisClient, installFrom, mcpClientIs, resetClientInfo, servingMcp } from './client-info.js';
 //# sourceMappingURL=index.js.map
