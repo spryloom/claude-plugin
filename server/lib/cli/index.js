@@ -17,7 +17,7 @@ import { init } from './commands/init.js';
 import { skill } from './commands/skill.js';
 import * as platform from './commands/platform.js';
 import { exportPageData, pageAccessLog, showPageData } from './commands/page-data.js';
-const VERSION = '0.1.19';
+const VERSION = '0.1.20';
 /**
  * A GitHub token, for publishing from a private repository.
  *

@@ -1,5 +1,11 @@
 # Spryloom for Claude Code
 
+> Spryloom's main repository is
+> [spryloom/spryloom](https://github.com/spryloom/spryloom): the skill, the
+> setup for Codex and Cursor, the source of the MCP server, and starter apps.
+> Star it, open issues there, and link to it. This repository is the Claude Code
+> plugin built from it, with the MCP server ready to run.
+
 Publish the app Claude Code just built to your team. Spryloom runs it at a
 private address that only the people you invite can open, with a database,
 scheduled jobs and email if the app asks for them. You don't set up a server,
@@ -64,7 +70,7 @@ Spryloom's full privacy policy is at
 
 ## License
 
-The contents of this repository (the skill and the plugin configuration) are
-released under the MIT License. See [LICENSE](LICENSE). The Spryloom service
-and the `spryloom` npm package have their own terms, at
-[spryloom.com/terms](https://spryloom.com/terms).
+The skill and the plugin configuration are released under the MIT License. See
+[LICENSE](LICENSE). `server/` holds the `spryloom` npm package, also MIT, and
+the libraries it uses, each under its own licence. The Spryloom service has its
+own terms, at [spryloom.com/terms](https://spryloom.com/terms).

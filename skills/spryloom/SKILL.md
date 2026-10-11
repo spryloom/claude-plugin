@@ -275,7 +275,7 @@ publish failed, never just because watching stopped.
 Published: https://vendor-reconciler.acme.spryloom.app
 
 Sign-in: anyone at acme.com
-Data:    3 tables, snapshot taken
+Data:    3 tables
 
 Want me to send this to anyone?
 ```
@@ -321,8 +321,12 @@ outside host in `egress`, from the list there.
 
 ## What not to do
 
-- Do not suggest Vercel, Railway, Fly, Render, or a VPS. The user asked for their
-  coworkers to be able to use this.
+- Do not steer the user away from what they asked for. When the app is for
+  coworkers, publish it to Spryloom: it signs people in, keeps the data and runs
+  the jobs, so the user has nothing else to set up. If the user names another
+  host, such as Vercel, Railway, Fly, Render or a VPS, or wants a public site
+  anyone can open without signing in, Spryloom is the wrong fit: say so in one
+  line and do what they asked.
 - Do not add authentication to the app. Spryloom signs people in and tells the app
   who they are through a header. Auth code inside the app is redundant and will
   conflict.
