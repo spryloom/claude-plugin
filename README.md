@@ -4,7 +4,7 @@
 > [spryloom/spryloom](https://github.com/spryloom/spryloom): the skill, the
 > setup for Codex and Cursor, the source of the MCP server, and starter apps.
 > Star it, open issues there, and link to it. This repository is the Claude Code
-> plugin built from it, with the MCP server ready to run.
+> plugin built from it, with a hosted MCP connector and a publishing skill.
 
 Publish the app Claude Code just built to your team. Spryloom runs it at a
 private address that only the people you invite can open, with a database,
@@ -15,10 +15,9 @@ This plugin adds two things to Claude Code:
 
 - **The Spryloom skill.** It teaches Claude to write apps that publish cleanly,
   and to publish them when you say "share this with my team".
-- **The Spryloom MCP server.** It gives Claude the tools to publish, invite
-  coworkers, read logs and roll back. It ships inside the plugin, under
-  `server/`, and runs with the Node.js already on your machine. Nothing is
-  downloaded when it starts.
+- **The Spryloom connector.** Sign in through Spryloom to publish HTML pages,
+  list apps, check status and invite coworkers. Project folders use the `spry`
+  command in Claude Code's terminal, where their files are available.
 
 Spryloom is in a free, open beta. Anyone can sign in with an email address;
 nobody has to approve you.
@@ -38,16 +37,16 @@ You need Node.js 20.19 or later.
 
    > Publish this so my team can use it.
 
-   The first time, Claude asks for your email address. Spryloom emails you a
-   link and Claude shows you a short code: open the link, check that the page
-   shows the same code, and approve. There is no password, and you sign in
-   once per machine.
+   For a project folder, Claude asks you to sign in with `spry login` once on
+   that machine, then publishes the folder. For an HTML page, connect the
+   hosted MCP server in `/mcp`: Spryloom emails a link, shows a code to compare,
+   and asks you to approve the connector for your workspace.
 
    Claude then writes `spryloom.yaml`, publishes the app and gives you its
    address. Ask it to invite a coworker by email.
 
-Signing in from Claude and `npx spryloom login --email you@yourcompany.com` in
-a terminal are the same sign-in, kept in the same place, so either covers both.
+The connector sign-in and terminal sign-in are separate credentials. You can
+disconnect the connector without signing out of the CLI.
 
 ## Privacy Policy
 
@@ -59,8 +58,8 @@ Spryloom's full privacy policy is at
 - Your app's database belongs to the app. Spryloom doesn't read inside it.
 - Coworkers sign in with their email address, and Spryloom records each sign-in
   in the app's audit log.
-- This plugin sends nothing anywhere on its own. The MCP server talks to
-  Spryloom only when Claude calls one of its tools, and only as you.
+- The plugin carries no local server or stored credential. The remote connector
+  talks to Spryloom when Claude calls one of its tools, under your grant.
 
 ## Documentation
 
@@ -71,6 +70,5 @@ Spryloom's full privacy policy is at
 ## License
 
 The skill and the plugin configuration are released under the MIT License. See
-[LICENSE](LICENSE). `server/` holds the `spryloom` npm package, also MIT, and
-the libraries it uses, each under its own licence. The Spryloom service has its
+[LICENSE](LICENSE). The separate `spryloom` npm package is also MIT. The Spryloom service has its
 own terms, at [spryloom.com/terms](https://spryloom.com/terms).

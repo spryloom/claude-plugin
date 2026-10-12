@@ -234,12 +234,20 @@ See `references/manifest.md` for every field.
 
 ### Publish
 
-Call the `publish` tool. If it says Spryloom is not signed in, ask the person
+For a project folder on this machine, use `spry publish` in its directory (or
+`npx -y spryloom publish` when `spry` is not installed). The hosted MCP tools
+cannot read the folder. For a single HTML page already in the conversation,
+call `publish_page` when available; it signs in through the connector and
+returns an operation ID and the page address. Check `status` before reporting
+that it is live. Ask who may use it before either publish path.
+
+The separately installed local MCP server may expose a `publish` tool. It can
+publish a folder. If it says Spryloom is not signed in, ask the person
 which email address to use, call `sign_in` with it, tell them the code it
 returns, and call `finish_sign_in` once they have approved. This happens once
 per machine.
 
-If the Spryloom tools are not available at all, use the command line. When
+For a folder, or if the Spryloom tools are not available, use the command line. When
 `spry` is not installed, `npx -y spryloom` is the same command and needs nothing
 installed, so read every `spry` in this skill that way. If installing it fails
 with `EACCES: permission denied`, use `npx -y spryloom`: never retry with

@@ -1,11 +1,11 @@
 {
   "mcpServers": {
     "spryloom": {
-      "command": "node",
-      "args": [
-        "${CLAUDE_PLUGIN_ROOT}/server/lib/cli/index.js",
-        "mcp"
-      ]
+      "type": "http",
+      "url": "https://app.spryloom.com/mcp",
+      "oauth": {
+        "scopes": "apps:read pages:publish invites:write"
+      }
     }
   }
 }
