@@ -235,7 +235,8 @@ See `references/manifest.md` for every field.
 
 ### Publish
 
-For a project folder on this machine, use `spry publish` in its directory. The hosted MCP tools
+For a project folder on this machine, use `spry publish` in its directory (or
+`npx -y spryloom publish` when `spry` is not installed). The hosted MCP tools
 cannot read the folder. For a single HTML page already in the conversation,
 call `publish_page` when available; it signs in through the connector and
 returns an operation ID and the page address. Check `status` before reporting
@@ -247,18 +248,20 @@ which email address to use, call `sign_in` with it, tell them the code it
 returns, and call `finish_sign_in` once they have approved. This happens once
 per machine.
 
-For a folder, or if the Spryloom tools are not available, use the command line.
-If `spry` is not installed, direct the person to the
-[Spryloom setup guide](https://spryloom.com/docs/getting-started) to install the
-CLI, then continue. Do not install software through the skill. Signing in waits
-for the person to click a link and shows a code they must see, so ask them to
-run it themselves (in Claude Code they can type it after `!`):
+For a folder, or if the Spryloom tools are not available, use the command line. When
+`spry` is not installed, `npx -y spryloom` is the same command and needs nothing
+installed, so read every `spry` in this skill that way. If installing it fails
+with `EACCES: permission denied`, use `npx -y spryloom`: never retry with
+`sudo`, and don't change the person's npm settings or shell profile unless they
+ask. Signing in waits for the
+person to click a link and shows a code they must see, so ask them to run it
+themselves (in Claude Code they can type it after `!`):
 
 ```
-spry login --email you@company.com
+npx -y spryloom login --email you@company.com
 ```
 
-Then run `spry publish` in the project directory.
+Then run `spry publish` (or `npx -y spryloom publish`) in the project directory.
 Never stop at "Spryloom is not connected": one of these paths always works.
 
 A publish takes a few minutes: Spryloom builds the app, sets up its database
