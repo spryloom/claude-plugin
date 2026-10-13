@@ -157,14 +157,11 @@ save_page_record({
 });
 ```
 
-Write a small script that reads the files and makes the calls, rather than
-reading each document yourself, and have it print counts, never records.
-Without the Spryloom tools, the same request is
-`POST https://app.spryloom.com/api/v1/pages/<workspace>/<page>/data` with
-`Authorization: Bearer <token>` and the body
-`{ "action": "add", "list": …, "data": … }`. The token is the one `spry login`
-saved in `.spryloom-session.json`, under the server's address: read it in the
-script, and never print it.
+Write a small script that reads the files and makes the tool calls, rather than
+reading each document yourself, and have it print counts, never records. If
+`save_page_record` is unavailable, explain that this plugin cannot migrate the
+saved records and stop before publishing an incomplete replacement. Do not read
+the CLI's saved session or make a direct API request with its credential.
 
 Then check: `spry data <page>` shows how many records each list holds. The
 counts should match what you told the person in step 2.
