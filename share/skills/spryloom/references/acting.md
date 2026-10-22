@@ -34,40 +34,11 @@ jobs:
 email: true
 ```
 
-Copy this helper into the app as `spryloom-notify.js` and use it. It sends a
-notification through Spryloom, which lays out the email, and retries safely.
-
-```js
-// spryloom-notify.js: send a notification through Spryloom (D86).
-export async function notify({ to, subject, text, button, dedupeKey }) {
-  const url = `${process.env.SPRYLOOM_GATEWAY_URL}/v1/notify`;
-  const body = JSON.stringify({ to, subject, text, button, dedupeKey });
-  for (let attempt = 1; attempt <= 3; attempt += 1) {
-    let response;
-    try {
-      response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          authorization: `Bearer ${process.env.SPRYLOOM_GATEWAY_KEY}`,
-          'content-type': 'application/json',
-        },
-        body,
-      });
-    } catch (error) {
-      if (attempt === 3) throw error;
-      await new Promise((resolve) => setTimeout(resolve, attempt * 1000));
-      continue;
-    }
-    const answer = await response.json().catch(() => ({}));
-    if (response.status === 202) return answer;
-    if (response.status >= 500 && attempt < 3) {
-      await new Promise((resolve) => setTimeout(resolve, attempt * 1000));
-      continue;
-    }
-    throw new Error(`${response.status} ${answer.error}: ${answer.message}`);
-  }
-}
-```
+Write a small helper into the app as `spryloom-notify.js`, exporting
+`notify({ to, subject, text, button, dedupeKey })`, that sends the request
+shown at https://spryloom.com/docs/jobs-and-email#email-to-the-people-who-use-the-app. Retry it up to three times
+on a network error or a 5xx answer, a second apart, and treat 202 as sent.
+Spryloom lays out the email.
 
 ```js
 import { notify } from './spryloom-notify.js';
