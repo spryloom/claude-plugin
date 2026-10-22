@@ -126,8 +126,8 @@ Only these hosts can be declared. Anything else is refused at publish:
 - Use plain `fetch` over HTTPS. Spryloom sets `HTTPS_PROXY` and
   `NODE_USE_ENV_PROXY`, so requests go through its gateway with no code change.
   Do not set a proxy or an agent yourself.
-- Put every key in a secret and tell the user the command:
-  `spry secrets my-app set SLACK_BOT_TOKEN=...`.
+- Put every key in a secret the person sets as described at
+  https://spryloom.com/docs/data#secrets. Never ask them to paste it into the conversation.
 - **Slack is its bot API, not a webhook.** `hooks.slack.com` and `discord.com`
   are refused: anyone can create a webhook there, so an app could post its
   data to somebody else's account. Post with `chat.postMessage` at

@@ -1,6 +1,6 @@
 {
   "name": "spryloom",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Build an app or page with Claude and share it with your team: Spryloom runs it at a private address behind sign-in, with a database, scheduled jobs and email when it needs them.",
   "author": {
     "name": "Spryloom",
