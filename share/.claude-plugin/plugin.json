@@ -1,0 +1,24 @@
+{
+  "name": "spryloom",
+  "version": "0.2.0",
+  "description": "Share a page or artifact you made with your team: Spryloom puts it at a private address that only the people you choose can open, behind sign-in.",
+  "author": {
+    "name": "Spryloom",
+    "email": "hello@spryloom.com",
+    "url": "https://spryloom.com"
+  },
+  "homepage": "https://spryloom.com/docs",
+  "privacyPolicyUrl": "https://spryloom.com/privacy",
+  "repository": "https://github.com/spryloom/claude-plugin",
+  "license": "MIT",
+  "keywords": [
+    "share",
+    "publish",
+    "pages",
+    "artifacts",
+    "team",
+    "coworkers",
+    "sign-in",
+    "mcp"
+  ]
+}
