@@ -8,7 +8,10 @@
     "url": "https://spryloom.com"
   },
   "homepage": "https://spryloom.com/docs",
+  "documentationUrl": "https://spryloom.com/docs/mcp",
+  "supportUrl": "https://spryloom.com/docs/troubleshooting",
   "privacyPolicyUrl": "https://spryloom.com/privacy",
+  "termsOfServiceUrl": "https://spryloom.com/terms",
   "repository": "https://github.com/spryloom/claude-plugin",
   "license": "MIT",
   "keywords": [
