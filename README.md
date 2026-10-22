@@ -1,8 +1,8 @@
 # Spryloom for Claude
 
 The plugin is in [`share/`](share/): a skill and Spryloom's hosted connector
-(`https://app.spryloom.com/mcp`) for sharing a page or artifact you made with
-your team, behind sign-in. Nothing in it runs on your computer. See
+(`https://app.spryloom.com/mcp`) for building an app or page with Claude and
+sharing it with your team, behind sign-in. Nothing in it runs on your computer. See
 [share/README.md](share/README.md).
 
 Install it in Claude Code:

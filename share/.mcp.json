@@ -4,7 +4,7 @@
       "type": "http",
       "url": "https://app.spryloom.com/mcp",
       "oauth": {
-        "scopes": "apps:read pages:publish invites:write"
+        "scopes": "apps:read pages:publish apps:publish invites:write"
       }
     }
   }

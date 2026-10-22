@@ -1,7 +1,7 @@
 {
   "name": "spryloom",
-  "version": "0.2.0",
-  "description": "Share a page or artifact you made with your team: Spryloom puts it at a private address that only the people you choose can open, behind sign-in.",
+  "version": "0.3.0",
+  "description": "Build an app or page with Claude and share it with your team: Spryloom runs it at a private address behind sign-in, with a database, scheduled jobs and email when it needs them.",
   "author": {
     "name": "Spryloom",
     "email": "hello@spryloom.com",
@@ -15,13 +15,16 @@
   "repository": "https://github.com/spryloom/claude-plugin",
   "license": "MIT",
   "keywords": [
-    "share",
     "publish",
+    "share",
+    "apps",
     "pages",
     "artifacts",
     "team",
     "coworkers",
     "sign-in",
+    "database",
+    "scheduled-jobs",
     "mcp"
   ]
 }

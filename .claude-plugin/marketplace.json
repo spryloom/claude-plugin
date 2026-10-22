@@ -5,13 +5,13 @@
     "email": "hello@spryloom.com"
   },
   "metadata": {
-    "description": "Spryloom's plugin for Claude: share a page with your team, behind sign-in."
+    "description": "Spryloom's plugin for Claude: build an app or page and share it with your team, behind sign-in."
   },
   "plugins": [
     {
       "name": "spryloom",
       "source": "./share",
-      "description": "Share a page or artifact you made with your team: a private address that only the people you choose can open."
+      "description": "Build an app or page with Claude and share it with your team: a private address behind sign-in, with a database, jobs and email when it needs them."
     }
   ]
 }
