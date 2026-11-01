@@ -68,7 +68,7 @@ too; the list is in `references/acting.md`.
 
 ## Never put in this file
 
-Secrets. It is committed to the repository. Use
-`spry secrets my-app set NAME=value` and read the value from the environment.
+Secrets. It is committed to the repository. The person sets it
+as described at https://spryloom.com/docs/data#secrets, and the app reads the value from the environment.
 Spryloom has no separate place for ordinary settings: a setting such as a
 reminder threshold is set the same way, or has a default in the code.

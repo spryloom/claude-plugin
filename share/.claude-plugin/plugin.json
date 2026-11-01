@@ -1,15 +1,14 @@
 {
   "name": "spryloom",
-  "displayName": "Spryloom",
-  "version": "0.1.23",
-  "description": "Publish the app your agent just built to your team: a private address behind sign-in, with a database, scheduled jobs and email. No servers to set up.",
+  "version": "0.3.2",
+  "description": "Build an app or page with Claude and share it with your team: Spryloom runs it at a private address behind sign-in, with a database, scheduled jobs and email when it needs them.",
   "author": {
     "name": "Spryloom",
     "email": "hello@spryloom.com",
     "url": "https://spryloom.com"
   },
   "homepage": "https://spryloom.com/docs",
-  "documentationUrl": "https://spryloom.com/docs/getting-started",
+  "documentationUrl": "https://spryloom.com/docs/mcp",
   "supportUrl": "https://spryloom.com/docs/troubleshooting",
   "privacyPolicyUrl": "https://spryloom.com/privacy",
   "termsOfServiceUrl": "https://spryloom.com/terms",
@@ -17,17 +16,15 @@
   "license": "MIT",
   "keywords": [
     "publish",
-    "deploy",
     "share",
-    "host",
-    "internal-tools",
+    "apps",
+    "pages",
+    "artifacts",
     "team",
     "coworkers",
     "sign-in",
-    "checklist",
-    "email-reminders",
+    "database",
     "scheduled-jobs",
     "mcp"
-  ],
-  "icon": "./.claude-plugin/icon.png"
+  ]
 }
